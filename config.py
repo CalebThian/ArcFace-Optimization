@@ -3,9 +3,9 @@ import torchvision.transforms as T
 
 class Config:
     # dataset
-    train_root = '/data/CASIA-WebFace'
-    test_root = "/data/lfw"
-    test_list = "/data/lfw_test_pair.txt"
+    train_root = './/data//CASIA-WebFace//'
+    test_root = ".//data//lfw//"
+    test_list = ".//data//lfw_test_pair.txt"
     
     ## Data Preprocessing
     input_shape = [1, 128, 128]
@@ -27,7 +27,8 @@ class Config:
     # Training Parameters setting
     train_batch_size = 64
     test_batch_size = 60
-
+    test_model = "checkpoints/24.pth"
+    
     pin_memory = True  # if memory is large, set it True for speed
     num_workers = 4  # dataloader
     
