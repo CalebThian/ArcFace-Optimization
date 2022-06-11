@@ -23,3 +23,10 @@ class Config:
         T.ToTensor(),
         T.Normalize(mean=[0.5], std=[0.5]),
     ])
+    
+    # Parameters setting
+    train_batch_size = 64
+    test_batch_size = 60
+
+    pin_memory = True  # if memory is large, set it True for speed
+    num_workers = 4  # dataloader
