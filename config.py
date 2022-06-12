@@ -25,11 +25,13 @@ class Config:
     ])
     
     # Training Parameters setting
+    train_sample_rate = 0.10
+    train_sample_batch_size = 2000
     train_batch_size = 64
     test_batch_size = 60
-    test_model = "checkpoints/24.pth"
+    test_model = "checkpoints/28_sample50%.pth"
     
-    pin_memory = True  # if memory is large, set it True for speed
+    pin_memory = True  # if memory is large, set it True for speed to use GPU
     num_workers = 4  # dataloader
     
     # Model Parameters setting
