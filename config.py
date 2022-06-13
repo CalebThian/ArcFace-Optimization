@@ -25,9 +25,9 @@ class Config:
     ])
     
     # Training Parameters setting
-    train_sample_rate = 0.10
+    train_sample_rate = 1.
     train_sample_batch_size = 2000
-    train_batch_size = 64
+    train_batch_size = 120
     test_batch_size = 60
     test_model = "checkpoints/28_sample50%.pth"
     
@@ -37,12 +37,12 @@ class Config:
     # Model Parameters setting
     backbone = 'fmobile' # [resnet, fmobile]
     metric = 'arcface'  # [cosface, arcface]
-    embedding_size = 512
+    embedding_size = 256
     drop_ratio = 0.5
     
     epoch = 30
     optimizer = 'sgd'  # ['sgd', 'adam']
-    lr = 1e-1
+    lr = 0.05#1e-1
     lr_step = 10
     lr_decay = 0.95
     weight_decay = 5e-4

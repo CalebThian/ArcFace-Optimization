@@ -17,37 +17,41 @@ def load_data(conf, training=True):
     class_num = len(data.classes)
     loader = DataLoader(data, batch_size = batch_size, shuffle=False, 
         pin_memory=conf.pin_memory, num_workers=conf.num_workers)
-    if training:
-        it = iter(loader)
-        Labels = []
-        while True:
-            try:
-                _, labels = it.next()
-                if len(labels) <= 0 :
+    if training :
+        if train_sample_rate == 1.0:
+            loader = DataLoader(data, batch_size = conf.train_batch_size, shuffle=False, 
+        pin_memory=conf.pin_memory, num_workers=conf.num_workers)
+        else:
+            it = iter(loader)
+            Labels = []
+            while True:
+                try:
+                    _, labels = it.next()
+                    if len(labels) <= 0 :
+                        break
+                    Labels.extend(list(labels.numpy()))
+                    print("\r%d"%Labels[-1],end="")
+                except:
                     break
-                Labels.extend(list(labels.numpy()))
-                print("\r%d"%Labels[-1],end="")
-            except:
-                break
-        #indices = {cls: np.random.choice(np.where(np.array(Labels) == cls)[0],
-        #                                 int(len(np.where(np.array(Labels) == cls)[0])*conf.train_sample_rate),replace = False) for cls in range(Labels[-1]+1)}
-        values,counts = np.unique(np.array(Labels),return_counts = True)
-        indices = dict()
-        total_imgs = 0
-        for i,cls in enumerate(values):
-            if i==0:
-                start = 0
-            else:
-                start = counts[i-1]
-            end = counts[i]
-            end = int(start + (end-start)*train_sample_rate)
-            indices[cls] = np.arange(start,end)
-            total_imgs += len(indices[cls])
-        train = Subset(data, indices=[i for v in indices.values() for i in v])
-        sampler = RandomSampler(train, replacement=True, num_samples=256)
-        loader = DataLoader(train, batch_size=conf.train_batch_size,
-                            pin_memory=conf.pin_memory, num_workers=conf.num_workers, sampler=sampler)
-        print("Total train images: %d"%total_imgs)
+            #indices = {cls: np.random.choice(np.where(np.array(Labels) == cls)[0],
+            #                                 int(len(np.where(np.array(Labels) == cls)[0])*conf.train_sample_rate),replace = False) for cls in range(Labels[-1]+1)}
+            values,counts = np.unique(np.array(Labels),return_counts = True)
+            indices = dict()
+            total_imgs = 0
+            for i,cls in enumerate(values):
+                if i==0:
+                    start = 0
+                else:
+                    start = counts[i-1]
+                end = counts[i]
+                end = int(start + (end-start)*train_sample_rate)
+                indices[cls] = np.arange(start,end)
+                total_imgs += len(indices[cls])
+            train = Subset(data, indices=[i for v in indices.values() for i in v])
+            sampler = RandomSampler(train, replacement=True, num_samples=256)
+            loader = DataLoader(train, batch_size=conf.train_batch_size,
+                                pin_memory=conf.pin_memory, num_workers=conf.num_workers, sampler=sampler)
+            print("Total train images: %d"%total_imgs)
     return loader, class_num
 
 
