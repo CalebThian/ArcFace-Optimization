@@ -19,7 +19,7 @@ def load_data(conf, training=True):
         pin_memory=conf.pin_memory, num_workers=conf.num_workers)
     if training :
         if train_sample_rate == 1.0:
-            loader = DataLoader(data, batch_size = conf.train_batch_size, shuffle=False, 
+            loader = DataLoader(data, batch_size = conf.train_batch_size, shuffle=True, 
         pin_memory=conf.pin_memory, num_workers=conf.num_workers)
         else:
             it = iter(loader)
@@ -48,9 +48,8 @@ def load_data(conf, training=True):
                 indices[cls] = np.arange(start,end)
                 total_imgs += len(indices[cls])
             train = Subset(data, indices=[i for v in indices.values() for i in v])
-            sampler = RandomSampler(train, replacement=True, num_samples=256)
             loader = DataLoader(train, batch_size=conf.train_batch_size,
-                                pin_memory=conf.pin_memory, num_workers=conf.num_workers, sampler=sampler)
+                                pin_memory=conf.pin_memory, num_workers=conf.num_workers,shuffle = True)
             print("Total train images: %d"%total_imgs)
     return loader, class_num
 
